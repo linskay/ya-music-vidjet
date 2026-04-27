@@ -12,14 +12,23 @@ public class App {
     private static Browser browser;
     private static Page page;
     private static PlayerController controller;
+    private static ConfigService configService;
     private static final Set<WsContext> clients = ConcurrentHashMap.newKeySet();
 
     public static void main(String[] args) {
         initBrowser();
         controller = new PlayerController(page);
+        configService = new ConfigService();
 
         Javalin app = Javalin.create(config -> config.staticFiles.add("/public"))
                 .start(7070);
+
+        app.get("/api/config", ctx -> ctx.json(configService.get()));
+        app.post("/api/config", ctx -> {
+            AppConfig cfg = ctx.bodyAsClass(AppConfig.class);
+            configService.save(cfg);
+            ctx.json(cfg);
+        });
 
         app.get("/api/state", ctx -> ctx.json(controller.getState()));
         app.ws("/ws/state", ws -> {
