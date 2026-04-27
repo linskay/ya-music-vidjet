@@ -13,25 +13,22 @@ public class PlayerController {
         try {
             return page.evaluate("""
                 () => {
-                  const title = document.querySelector('[data-test-id=track-title]')?.textContent || '';
-                  const artist = document.querySelector('[data-test-id=track-artist]')?.textContent || '';
-                  const cover = document.querySelector('img')?.src || '';
+                  const pickText = (...selectors) => selectors.map(s => document.querySelector(s)?.textContent?.trim()).find(Boolean) || '';
+                  const pickAttr = (attr, ...selectors) => selectors.map(s => document.querySelector(s)?.getAttribute(attr)).find(Boolean) || '';
+                  const title = pickText('[data-test-id=track-title]', '.track__title', '.player-controls__track-title', '[class*=TrackTitle]');
+                  const artist = pickText('[data-test-id=track-artist]', '.track__artists', '.player-controls__artists', '[class*=Artist]');
+                  const cover = pickAttr('src', '[data-test-id=track-cover] img', '.player-controls__track-cover img', '.track__cover img', 'img[src*="avatars.yandex"]', 'img[src*="music"]');
                   const audio = document.querySelector('audio');
-                  return {
-                    title,
-                    artist,
-                    cover,
-                    current: audio ? Math.floor(audio.currentTime) : 0,
-                    duration: audio ? Math.floor(audio.duration) : 0,
-                    progress: audio && audio.duration ? audio.currentTime/audio.duration : 0,
-                    volume: audio ? audio.volume : 0,
-                    playing: audio ? !audio.paused : false,
-                    liked: !!document.querySelector('[data-test-id=like-button][aria-pressed=true]')
-                  };
+                  const current = audio && Number.isFinite(audio.currentTime) ? audio.currentTime : 0;
+                  const duration = audio && Number.isFinite(audio.duration) ? audio.duration : 0;
+                  const volume = audio ? audio.volume : 0;
+                  const playing = audio ? !audio.paused : false;
+                  const liked = !!document.querySelector('[data-test-id=like-button][aria-pressed=true], .player-controls__btn_like.deco-button_checked, button[aria-label*=Нравится][aria-pressed=true]');
+                  return { title, artist, cover, current, duration, progress: duration ? current / duration : 0, volume, playing, liked };
                 }
             """);
         } catch (Exception e) {
-            return new PlayerState("","","","0","0",0,0,false,false);
+            return new PlayerState("","","",0,0,0,0,false,false);
         }
     }
 }
