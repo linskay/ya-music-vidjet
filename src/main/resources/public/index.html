@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Ya Music Vidjet</title>
+<style>
+body {
+    margin:0;
+    background: transparent;
+    font-family: monospace;
+}
+.panel {
+    width: 300px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(10,10,20,0.6);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px #00ffff33;
+}
+button {
+    background: transparent;
+    border: 1px solid #00ffff;
+    color: #00ffff;
+    padding: 6px 10px;
+    margin: 4px;
+    cursor: pointer;
+}
+button:hover {
+    box-shadow: 0 0 10px #00ffff;
+}
+</style>
+</head>
+<body>
+<div class="panel">
+    <button onclick="fetch('/api/play')">PLAY</button>
+    <button onclick="fetch('/api/next')">NEXT</button>
+    <button onclick="fetch('/api/like')">LIKE</button>
+</div>
+</body>
+</html>
