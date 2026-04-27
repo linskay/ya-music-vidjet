@@ -6,9 +6,12 @@ use tauri::{Manager, State};
 
 struct BackendProcess(Mutex<Option<Child>>);
 
-fn spawn_backend() -> Option<Child> {
+fn spawn_backend(app: &tauri::AppHandle) -> Option<Child> {
+    let path = app.path_resolver().resolve_resource("ya-music-vidjet-0.1.0-SNAPSHOT.jar")?;
+
     Command::new("java")
-        .args(["-jar", "target/ya-music-vidjet-0.1.0-SNAPSHOT.jar"])
+        .arg("-jar")
+        .arg(path)
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .spawn()
@@ -16,44 +19,34 @@ fn spawn_backend() -> Option<Child> {
 }
 
 #[tauri::command]
-fn show_window(app: tauri::AppHandle) {
-    if let Some(window) = app.get_window("main") {
-        let _ = window.show();
-        let _ = window.set_focus();
+fn exit_app(app: tauri::AppHandle, state: State<BackendProcess>) {
+    if let Some(mut child) = state.0.lock().unwrap().take() {
+        let _ = child.kill();
     }
-}
-
-#[tauri::command]
-fn hide_window(app: tauri::AppHandle) {
-    if let Some(window) = app.get_window("main") {
-        let _ = window.hide();
-    }
+    std::process::exit(0);
 }
 
 fn main() {
     tauri::Builder::default()
         .manage(BackendProcess(Mutex::new(None)))
-        .invoke_handler(tauri::generate_handler![show_window, hide_window])
+        .invoke_handler(tauri::generate_handler![exit_app])
         .setup(|app| {
             let window = app.get_window("main").unwrap();
             window.set_always_on_top(true).unwrap();
 
             let state: State<BackendProcess> = app.state();
-            *state.0.lock().unwrap() = spawn_backend();
+            *state.0.lock().unwrap() = spawn_backend(&app.handle());
 
             let app_handle = app.handle().clone();
-            let tray = tauri::tray::TrayIconBuilder::new()
+            tauri::tray::TrayIconBuilder::new()
                 .tooltip("YA Music Widget")
-                .on_tray_icon_event(move |_tray, event| {
-                    if let tauri::tray::TrayIconEvent::Click { .. } = event {
-                        if let Some(window) = app_handle.get_window("main") {
-                            let _ = window.show();
-                            let _ = window.set_focus();
-                        }
+                .on_tray_icon_event(move |_tray, _| {
+                    if let Some(window) = app_handle.get_window("main") {
+                        let _ = window.show();
                     }
                 })
                 .build(app)?;
-            app.manage(tray);
+
             Ok(())
         })
         .on_window_event(|window, event| {
@@ -62,14 +55,6 @@ fn main() {
                 let _ = window.hide();
             }
         })
-        .build(tauri::generate_context!())
-        .expect("error while building tauri application")
-        .run(|app, event| {
-            if let tauri::RunEvent::ExitRequested { api, .. } = event {
-                api.prevent_exit();
-                if let Some(window) = app.get_window("main") {
-                    let _ = window.hide();
-                }
-            }
-        });
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }
