@@ -2,15 +2,17 @@ package ru.linskay.ymv;
 
 import com.microsoft.playwright.*;
 import io.javalin.Javalin;
+import io.javalin.websocket.WsContext;
 
-import java.io.PrintWriter;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class App {
     private static Playwright playwright;
     private static Browser browser;
     private static Page page;
     private static PlayerController controller;
+    private static final Set<WsContext> clients = ConcurrentHashMap.newKeySet();
 
     public static void main(String[] args) {
         initBrowser();
@@ -20,27 +22,12 @@ public class App {
                 .start(7070);
 
         app.get("/api/state", ctx -> ctx.json(controller.getState()));
-        app.get("/api/stream", ctx -> {
-            ctx.contentType("text/event-stream");
-            ctx.header("Cache-Control", "no-cache");
-            ctx.header("Connection", "keep-alive");
-
-            AtomicBoolean active = new AtomicBoolean(true);
-            ctx.req().getAsyncContext();
-            ctx.future(() -> java.util.concurrent.CompletableFuture.runAsync(() -> {
-                try (PrintWriter writer = ctx.res().getWriter()) {
-                    while (active.get() && !Thread.currentThread().isInterrupted()) {
-                        String json = io.javalin.json.JavalinJackson.defaultMapper().toJsonString(controller.getState(), PlayerState.class);
-                        writer.write("event: state\n");
-                        writer.write("data: " + json + "\n\n");
-                        writer.flush();
-                        Thread.sleep(500);
-                    }
-                } catch (Exception ignored) {
-                    active.set(false);
-                }
-            }));
+        app.ws("/ws/state", ws -> {
+            ws.onConnect(ctx -> clients.add(ctx));
+            ws.onClose(ctx -> clients.remove(ctx));
+            ws.onError(ctx -> clients.remove(ctx));
         });
+        startStateBroadcaster();
 
         app.get("/api/play", ctx -> runCommand(ctx, () -> clickAny("[data-test-id='play-button']", ".player-controls__btn_play", "button[aria-label*='Воспроизвести']", "button[aria-label*='Пауза']")));
         app.get("/api/next", ctx -> runCommand(ctx, () -> clickAny("[data-test-id='next-button']", ".player-controls__btn_next", "button[aria-label*='Следующий']")));
@@ -54,6 +41,22 @@ public class App {
         }));
 
         Runtime.getRuntime().addShutdownHook(new Thread(App::shutdown));
+    }
+
+    private static void startStateBroadcaster() {
+        Thread thread = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    String json = io.javalin.json.JavalinJackson.defaultMapper().toJsonString(controller.getState(), PlayerState.class);
+                    for (WsContext client : clients) {
+                        try { client.send(json); } catch (Exception e) { clients.remove(client); }
+                    }
+                    Thread.sleep(400);
+                } catch (Exception ignored) {}
+            }
+        }, "player-state-broadcaster");
+        thread.setDaemon(true);
+        thread.start();
     }
 
     private static void initBrowser() {
