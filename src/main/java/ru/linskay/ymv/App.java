@@ -3,6 +3,9 @@ package ru.linskay.ymv;
 import com.microsoft.playwright.*;
 import io.javalin.Javalin;
 
+import java.io.PrintWriter;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class App {
     private static Playwright playwright;
     private static Browser browser;
@@ -17,6 +20,28 @@ public class App {
                 .start(7070);
 
         app.get("/api/state", ctx -> ctx.json(controller.getState()));
+        app.get("/api/stream", ctx -> {
+            ctx.contentType("text/event-stream");
+            ctx.header("Cache-Control", "no-cache");
+            ctx.header("Connection", "keep-alive");
+
+            AtomicBoolean active = new AtomicBoolean(true);
+            ctx.req().getAsyncContext();
+            ctx.future(() -> java.util.concurrent.CompletableFuture.runAsync(() -> {
+                try (PrintWriter writer = ctx.res().getWriter()) {
+                    while (active.get() && !Thread.currentThread().isInterrupted()) {
+                        String json = io.javalin.json.JavalinJackson.defaultMapper().toJsonString(controller.getState(), PlayerState.class);
+                        writer.write("event: state\n");
+                        writer.write("data: " + json + "\n\n");
+                        writer.flush();
+                        Thread.sleep(500);
+                    }
+                } catch (Exception ignored) {
+                    active.set(false);
+                }
+            }));
+        });
+
         app.get("/api/play", ctx -> runCommand(ctx, () -> clickAny("[data-test-id='play-button']", ".player-controls__btn_play", "button[aria-label*='Воспроизвести']", "button[aria-label*='Пауза']")));
         app.get("/api/next", ctx -> runCommand(ctx, () -> clickAny("[data-test-id='next-button']", ".player-controls__btn_next", "button[aria-label*='Следующий']")));
         app.get("/api/prev", ctx -> runCommand(ctx, () -> clickAny("[data-test-id='prev-button']", ".player-controls__btn_prev", "button[aria-label*='Предыдущий']")));
