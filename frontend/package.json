@@ -1,0 +1,1 @@
+{"scripts":{"dev":"vite --host 127.0.0.1 --port 5173","build":"vite build --outDir ../src/main/resources/public --emptyOutDir"},"dependencies":{"@vitejs/plugin-svelte":"latest","vite":"latest","svelte":"latest","typescript":"latest"},"devDependencies":{}}
