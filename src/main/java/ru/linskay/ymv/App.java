@@ -17,6 +17,7 @@ public class App {
 
     public static void main(String[] args) {
         initBrowser();
+        TrayService.init();
         controller = new PlayerController(page);
         configService = new ConfigService();
 
