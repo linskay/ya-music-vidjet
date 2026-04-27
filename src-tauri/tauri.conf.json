@@ -7,15 +7,26 @@
     "frontendDist": "../frontend/dist",
     "devUrl": "http://localhost:5173"
   },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "resources": [
+      "../target/ya-music-vidjet-0.1.0-SNAPSHOT.jar"
+    ]
+  },
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "YA Music Widget",
-        "width": 900,
-        "height": 400,
+        "width": 980,
+        "height": 460,
         "decorations": false,
         "alwaysOnTop": true,
-        "transparent": true
+        "transparent": true,
+        "resizable": false,
+        "skipTaskbar": true,
+        "visible": true
       }
     ]
   }
