@@ -35,7 +35,7 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://linskay.github.io/ya-music-vidjet/latest.json"
+        "https://github.com/linskay/ya-music-vidjet/releases/latest/download/latest.json"
       ],
       "dialog": true,
       "pubkey": "PASTE_TAURI_UPDATER_PUBLIC_KEY_HERE"
