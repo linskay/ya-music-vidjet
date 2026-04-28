@@ -11,9 +11,12 @@ public record AppConfig(
         boolean locked,
         boolean closeToTray,
         boolean hideUi,
-        boolean startHidden
+        boolean startHidden,
+        boolean reactiveEffects,
+        String reactiveMode,
+        boolean experimentalFftAnalyzer
 ) {
     public static AppConfig defaults() {
-        return new AppConfig(true, "hud", "wave", "floating", true, false, true, false, true, false, false);
+        return new AppConfig(true, "hud", "wave", "floating", true, false, true, false, true, false, false, true, "normal", false);
     }
 }
