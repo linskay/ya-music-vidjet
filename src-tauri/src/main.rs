@@ -28,6 +28,7 @@ fn exit_app(app: tauri::AppHandle, state: State<BackendProcess>) {
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .manage(BackendProcess(Mutex::new(None)))
         .invoke_handler(tauri::generate_handler![exit_app])
         .setup(|app| {
