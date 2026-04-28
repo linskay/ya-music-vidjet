@@ -28,39 +28,26 @@ YA Music Widget — это **desktop overlay плеер**, который зам
 ## ✨ Features
 
 - 🎧 Play / Pause / Next / Prev / Like
-- 🌊 «Моя волна» по умолчанию
+- 🌊 «Моя волна" по умолчанию
 - 🧿 Floating Orb режим
-- 🧠 Adaptive performance (сам снижает нагрузку)
-- ⚡ WebSocket real-time sync
+- 🧠 Adaptive performance
+- ⚡ WebSocket sync
 - 🎛 Settings wizard
-- 📌 Always-on-top / Desktop pin / Floating
+- 📌 Always-on-top / Desktop pin
 - 🪟 Tray + background mode
 - 💡 Reactive glow UI
-- 🧩 Installer (.msi / .exe)
 
 ---
 
-## 🖥 UI Modes
+## 🖥 Widgets Preview
 
-### 🔥 HUD
-Полный киберпанк плеер
-
-### ➖ Slim
-Компактная панель
-
-### ⚪ Orb
-Минималистичный режим
-
----
-
-## 🎛 Settings
+![widgets](docs/assets/widgets.svg)
 
 ```text
-✔ автозапуск
-✔ выбор виджета
-✔ поведение окна
-✔ tray режим
-✔ reactive effects (low / normal / aggressive)
+HUD — основной режим
+Slim — компактная панель
+Orb — минимальный режим
+Source — выбор источника
 ```
 
 ---
@@ -68,25 +55,9 @@ YA Music Widget — это **desktop overlay плеер**, который зам
 ## ⚡ Performance
 
 ```text
-requestAnimationFrame loop
-adaptive FPS detection
-auto low-mode на слабых ПК
-```
-
----
-
-## 🧠 Architecture
-
-```text
-Tauri
-  ↓
-Svelte UI
-  ↓
-Java + Javalin
-  ↓
-Playwright
-  ↓
-Yandex Music
+requestAnimationFrame
+adaptive FPS
+auto low mode
 ```
 
 ---
@@ -98,25 +69,6 @@ mvn clean package
 npm run build
 cargo tauri build
 ```
-
----
-
-## 🧿 Roadmap
-
-- [x] HUD UI
-- [x] Settings
-- [x] Tray
-- [x] Reactive engine
-- [x] Installer
-- [ ] Auto-update production
-- [ ] Better selectors
-- [ ] Optional real audio analyzer
-
----
-
-## 🧪 Preview
-
-(добавь GIF сюда позже — будет выглядеть 🔥)
 
 ---
 
