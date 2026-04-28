@@ -9,10 +9,37 @@
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": ["msi", "nsis"],
+    "publisher": "Linskay",
+    "category": "Music",
+    "shortDescription": "Cyberpunk Yandex Music desktop widget",
+    "longDescription": "Neon desktop overlay widget for Yandex Music with Java backend, Playwright control, WebSocket sync and tray mode.",
     "resources": [
       "../target/ya-music-vidjet-0.1.0-SNAPSHOT.jar"
-    ]
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      },
+      "nsis": {
+        "displayLanguageSelector": true,
+        "installerIcon": "icons/icon.ico",
+        "installMode": "perMachine"
+      },
+      "wix": {
+        "language": ["en-US", "ru-RU"]
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://linskay.github.io/ya-music-vidjet/latest.json"
+      ],
+      "dialog": true,
+      "pubkey": "PASTE_TAURI_UPDATER_PUBLIC_KEY_HERE"
+    }
   },
   "app": {
     "windows": [
