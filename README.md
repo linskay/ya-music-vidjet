@@ -1,63 +1,158 @@
-# Ya Music Vidjet
+# YA Music Widget
 
-Мини-виджет для Яндекс Музыки на Windows: Java backend + Svelte frontend + Playwright control.
+Cyberpunk desktop overlay for Yandex Music on Windows.
+
+Это не просто кнопки управления. Это нативный desktop-виджет с живым HUD, floating orb, настройками, tray/background режимом, WebSocket-синхронизацией и Tauri-сборкой под `.exe` / installer.
+
+## Что уже есть
+
+- Java 21 + Maven backend.
+- Javalin HTTP API.
+- Playwright управление Yandex Music в фоне.
+- Svelte + Vite frontend.
+- Tauri desktop shell.
+- WebSocket live state sync.
+- Full HUD, Slim Bar, Floating Orb, Source Menu.
+- Cyberpunk UI: neon glow, scanline, glitch, animated equalizer, HUD corners, reactive glow.
+- Drag & Snap.
+- Lock position.
+- Settings wizard.
+- `config.json`.
+- Tray/background режим.
+- Tauri packaging skeleton.
+- MSI / NSIS installer config.
+- Updater endpoint config.
+- Adaptive performance: low / normal / aggressive reactive effects.
 
 ## Концепт
 
-Приложение работает как киберпанк overlay-плеер поверх рабочего стола. Яндекс Музыка управляется в фоне через Playwright, а пользователь видит только лёгкий неоновый виджет.
+```text
+закрыл окно → приложение не умерло
+виджет/музыка продолжают работать
+tray открывает UI обратно
+Yandex Music живёт в скрытом Playwright-браузере
+```
+
+Пользователь видит только лёгкий неоновый overlay, а не тяжёлое официальное приложение.
 
 ## Архитектура
 
 ```text
-Svelte/Vite frontend
-  ↓ HTTP API
+Tauri native shell
+  ↓
+Svelte/Vite UI
+  ↓ HTTP + WebSocket
 Java 21 + Maven + Javalin backend
   ↓ Playwright
 Yandex Music web player
 ```
 
-## Основные режимы виджетов
+## Режимы UI
 
-- **Full HUD** — большой плеер как на концепте: обложка, трек, прогресс, громкость, prev/play/next/like/dislike, источник.
-- **Slim Bar** — длинная тонкая панель с обложкой, названием, кнопками и громкостью.
-- **Compact Controls** — маленькая панель только с основными кнопками.
-- **Floating Orb** — круглая кнопка/шар, раскрывающая управление по клику или hover.
-- **Source Menu** — панель выбора: Моя волна, плейлисты, новинки, качество.
+### Full HUD
 
-## Settings-first сценарий
+Большой киберпанк-плеер:
 
-При первом запуске открывается окно настроек:
+- обложка;
+- трек / артист;
+- progress bar;
+- play / prev / next;
+- like / dislike;
+- volume;
+- source selector;
+- animated glow / scanline / glitch.
 
-- автозапуск вместе с Windows;
-- выбор активного виджета галочками;
-- режим закрепления:
-  - всегда поверх окон;
-  - прикрепить к рабочему столу;
-  - свободное плавание;
-- lock position: перетащил куда нужно и заблокировал;
-- запуск в фоне без кнопки/ярлыка на панели задач;
-- открыть/закрыть виджет без остановки музыки;
-- выбор стартового источника: по умолчанию `Моя волна`;
-- включить/отключить анимации;
-- сила glow/blur;
-- горячие клавиши;
-- диагностика Playwright-сессии и авторизации Яндекса.
+### Slim Bar
 
-## Управление
+Компактная длинная панель для постоянного отображения.
 
-Backend API:
+### Floating Orb
 
-```text
-GET /api/play
-GET /api/prev
-GET /api/next
-GET /api/like
-GET /api/dislike
-GET /api/wave
-GET /api/volume/{value}
+Минимальный режим: круглая неоновая кнопка, которую можно раскрыть в HUD. В этом режиме тяжёлые эффекты отключаются.
+
+### Source Menu
+
+Панель источников: `Моя волна`, плейлисты, новинки, качество.
+
+## Settings
+
+Wizard настроек содержит:
+
+- автозапуск Windows;
+- выбор виджета: HUD / Slim / Orb;
+- стартовый источник: `Моя волна`;
+- always-on-top;
+- desktop-pin;
+- floating mode;
+- lock position;
+- close to tray;
+- hide UI;
+- start hidden;
+- audio reactive effects;
+- reactive mode: low / normal / aggressive.
+
+Конфиг сохраняется локально:
+
+```json
+{
+  "autostart": true,
+  "widget": "hud",
+  "startSource": "wave",
+  "windowMode": "floating",
+  "alwaysOnTop": true,
+  "desktopPin": false,
+  "floating": true,
+  "locked": false,
+  "closeToTray": true,
+  "hideUi": false,
+  "startHidden": false,
+  "reactiveEffects": true,
+  "reactiveMode": "normal",
+  "experimentalFftAnalyzer": false
+}
 ```
 
-## Сборка
+## Performance
+
+UI не делает тяжёлый системный audio capture по умолчанию.
+
+Сейчас используется лёгкая reactive-модель:
+
+```text
+Yandex Music state → progress / playing / volume
+  ↓
+lightweight energy model
+  ↓
+CSS variables: --react / --perf
+  ↓
+glow / glitch / orb / progress / noise
+```
+
+Оптимизация:
+
+- `requestAnimationFrame` вместо `setInterval`;
+- tick rate зависит от режима;
+- adaptive performance снижает эффекты при просадке FPS;
+- orb / hidden mode отключают glitch;
+- FFT/audio capture оставлен как experimental future task.
+
+## Backend API
+
+```text
+GET  /api/config
+POST /api/config
+GET  /api/state
+WS   /ws/state
+GET  /api/play
+GET  /api/prev
+GET  /api/next
+GET  /api/like
+GET  /api/dislike
+GET  /api/wave
+GET  /api/volume/{value}
+```
+
+## Локальный запуск
 
 Backend:
 
@@ -66,56 +161,115 @@ mvn clean package
 java -jar target/ya-music-vidjet-0.1.0-SNAPSHOT.jar
 ```
 
-Frontend:
+Frontend dev:
 
 ```bash
 cd frontend
 npm install
+npm run dev
+```
+
+Frontend build:
+
+```bash
+cd frontend
 npm run build
 ```
 
-## Roadmap
+## Desktop build / installer
 
-### v0.1 — working prototype
+Требования:
 
-- [x] Java 21 + Maven backend.
-- [x] Javalin HTTP API.
-- [x] Playwright управление Яндекс Музыкой.
-- [x] play / prev / next / like / dislike / wave / volume.
-- [x] headless/background browser mode.
-- [x] DOM cleanup для уменьшения нагрузки.
-- [x] `.gitignore`.
-- [x] Svelte/Vite frontend scaffold.
+- Java 21;
+- Maven;
+- Node.js / npm;
+- Rust через rustup;
+- Tauri CLI.
 
-### v0.2 — cyberpunk widget pack
+Tauri CLI:
 
-- [ ] Full HUD виджет как на концепте.
-- [ ] Slim Bar виджет.
-- [ ] Compact Controls виджет.
-- [ ] Floating Orb с раскрывающейся анимацией.
-- [ ] Source Menu.
-- [ ] SVG/clip-path неоновые контурные кнопки.
-- [ ] Cyan/magenta glow animations.
-- [ ] Drag & Snap.
-- [ ] Lock position.
+```bash
+cargo install tauri-cli
+```
 
-### v0.3 — settings app
+Полная сборка:
 
-- [ ] Первичный wizard настроек при установке.
-- [ ] Автозапуск Windows.
-- [ ] Выбор виджетов галочками.
-- [ ] Always-on-top / desktop-pin / floating режимы.
-- [ ] Hide settings window while widget keeps playing.
-- [ ] Tray menu.
-- [ ] Сохранение настроек в локальный config.
+```bash
+mvn clean package
+cd frontend
+npm install
+npm run build
+cd ..
+cargo tauri build
+```
 
-### v0.4 — packaging
+Ожидаемый результат:
 
-- [ ] Fat jar.
-- [ ] Windows `.exe` launcher.
-- [ ] Installer.
-- [ ] Автообновление позже.
+```text
+src-tauri/target/release/bundle/
+```
 
-## Важное ограничение
+Настроены:
 
-Селекторы Яндекс Музыки могут меняться. Поэтому управление делается через fallback-селекторы и отдельный слой `PlayerController`, чтобы быстро чинить изменения DOM.
+- Tauri resource bundle для backend jar;
+- MSI target;
+- NSIS target;
+- updater endpoint skeleton.
+
+## Auto-update
+
+В `src-tauri/tauri.conf.json` заложен updater endpoint:
+
+```text
+https://linskay.github.io/ya-music-vidjet/latest.json
+```
+
+Для полноценного updater нужно добавить:
+
+- production `latest.json`;
+- подпись релиза через Tauri signer;
+- публичный ключ updater вместо placeholder;
+- загрузку `.msi` / `.exe` из GitHub Releases или Pages.
+
+## Tray / background mode
+
+Поведение:
+
+```text
+close window → hide window
+backend продолжает работать
+Playwright продолжает работать
+tray click → открыть UI обратно
+Exit → остановить backend и выйти
+```
+
+## Project status
+
+### Done
+
+- [x] Java backend.
+- [x] Playwright control.
+- [x] WebSocket state sync.
+- [x] Svelte HUD.
+- [x] Cyberpunk UI pack.
+- [x] Settings wizard.
+- [x] Local config persistence.
+- [x] Tray skeleton.
+- [x] Tauri shell.
+- [x] Backend bundled as Tauri resource.
+- [x] Adaptive reactive effects.
+- [x] Installer config.
+- [x] Updater config skeleton.
+
+### Next
+
+- [ ] Реальные release assets для updater.
+- [ ] Настоящий `.ico` / icon pack в `src-tauri/icons`.
+- [ ] Полный test build на Windows.
+- [ ] Проверка логина Yandex Music при первом запуске.
+- [ ] Более точные селекторы Yandex Music при необходимости.
+- [ ] Experimental real audio FFT analyzer, если понадобится.
+
+## Important limitation
+
+Yandex Music DOM может меняться. Управление вынесено в `PlayerController` с fallback-селекторами, чтобы чинить изменения быстро и локально.
