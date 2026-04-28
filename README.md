@@ -2,49 +2,48 @@
 
 ![preview](docs/assets/preview.svg)
 
-> Cyberpunk desktop overlay for Yandex Music — fast, lightweight, reactive.
+> Лёгкий desktop-виджет для Яндекс Музыки с неоновым HUD
 
 ![platform](https://img.shields.io/badge/platform-Windows-blue)
 ![stack](https://img.shields.io/badge/stack-Java%20%7C%20Svelte%20%7C%20Tauri-purple)
 ![status](https://img.shields.io/badge/status-active-success)
-![build](https://img.shields.io/badge/build-MSI%20%7C%20NSIS-orange)
 
 ---
 
-## 🚀 What is this
+## 🚀 Что это
 
-YA Music Widget — это **desktop overlay плеер**, который заменяет тяжёлое приложение Яндекс Музыки.
+YA Music Widget — это **десктопный виджет**, который заменяет тяжёлое приложение Яндекс Музыки.
 
 ```text
-нет браузера
-нет тяжёлого UI
-есть быстрый неоновый HUD
+✔ лёгкий
+✔ быстрый
+✔ всегда под рукой
 ```
 
-Музыка играет в фоне через Playwright, а ты видишь только лёгкий интерфейс.
+Музыка работает в фоне, а управление происходит через компактный overlay.
 
 ---
 
-## ✨ Features
+## ✨ Возможности
 
-- 🎧 Play / Pause / Next / Prev / Like
-- 🌊 «Моя волна" по умолчанию
-- 🧿 Floating Orb режим
-- 🧠 Adaptive performance
-- ⚡ WebSocket sync
-- 🎛 Settings wizard
-- 📌 Always-on-top / Desktop pin
-- 🪟 Tray + background mode
-- 💡 Reactive glow UI
+- ▶ Play / Pause / Next / Prev
+- ❤️ Like / Dislike
+- 🌊 «Моя волна»
+- 🧿 Мини-режим (Orb)
+- ⚡ Живое обновление (WebSocket)
+- 🎛 Настройки
+- 📌 Поверх всех окон
+- 🪟 Работа в фоне (tray)
+- 💡 Анимированный неоновый UI
 
 ---
 
-## 🖥 Widgets Preview
+## 🖥 Виды виджетов
 
 ![widgets](docs/assets/widgets.svg)
 
 ```text
-HUD — основной режим
+HUD — основной интерфейс
 Slim — компактная панель
 Orb — минимальный режим
 Source — выбор источника
@@ -52,17 +51,18 @@ Source — выбор источника
 
 ---
 
-## ⚡ Performance
+## ⚡ Производительность
 
 ```text
-requestAnimationFrame
-adaptive FPS
-auto low mode
+✔ requestAnimationFrame
+✔ авто-оптимизация
+✔ снижение нагрузки при лаге
+✔ лёгкий режим
 ```
 
 ---
 
-## 📦 Build
+## 📦 Сборка
 
 ```bash
 mvn clean package
@@ -72,9 +72,8 @@ cargo tauri build
 
 ---
 
-## ⭐ Status
+## ⭐ Статус
 
 ```text
-production-ready UI
-near-release desktop app
+готово к использованию
 ```
