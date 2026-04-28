@@ -1,0 +1,19 @@
+<svg width="960" height="320" viewBox="0 0 960 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="120" y1="80" x2="840" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#16E8FF"/>
+      <stop offset="0.42" stop-color="#2F8DFF"/>
+      <stop offset="0.68" stop-color="#FF4DF2"/>
+      <stop offset="1" stop-color="#FF168E"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-50%" width="160%" height="220%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="0 0 0 0 0.1 0 0 0 0 0.9 0 0 0 0 1 0 0 0 0.9 0"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <path d="M72 172h90l18-18 18 18h44" stroke="#16E8FF" stroke-width="5" filter="url(#glow)"/>
+  <path d="M706 172h58l18-18 18 18h88" stroke="#FF4DF2" stroke-width="5" filter="url(#glow)"/>
+  <text x="180" y="205" font-family="Orbitron, Segoe UI, Arial Black, sans-serif" font-size="120" font-weight="900" letter-spacing="-10" fill="url(#g)" stroke="#09101F" stroke-width="5" filter="url(#glow)">YPULSE</text>
+  <path d="M135 88l72 72 92-106-74 160-44-52-40 90-28-122z" fill="url(#g)" stroke="#BFFBFF" stroke-width="4" filter="url(#glow)"/>
+</svg>
