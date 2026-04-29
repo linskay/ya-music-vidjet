@@ -15,6 +15,9 @@
     startHidden: boolean;
     reactiveEffects: boolean;
     reactiveMode: string;
+    experimentalFftAnalyzer?: boolean;
+    fftMode?: string;
+    disableFftInBackground?: boolean;
   };
 
   const dispatch = createEventDispatcher<{ saved: AppConfig; close: void }>();
@@ -35,7 +38,10 @@
     hideUi: false,
     startHidden: false,
     reactiveEffects: true,
-    reactiveMode: 'normal'
+    reactiveMode: 'normal',
+    experimentalFftAnalyzer: false,
+    fftMode: 'low',
+    disableFftInBackground: true
   };
 
   async function load() {
@@ -69,60 +75,73 @@
 </script>
 
 <section class="settings-shell">
-  <div class="scanline"></div>
   <header>
-    <div>
-      <span class="eyebrow">YA MUSIC VIDJET</span>
-      <h1>SETTINGS WIZARD</h1>
-    </div>
+    <h1>НАСТРОЙКИ</h1>
     <button class="close" on:click={() => dispatch('close')}>×</button>
   </header>
 
   <nav class="steps">
-    <button class:active={step === 1} on:click={() => step = 1}>01 BASE</button>
-    <button class:active={step === 2} on:click={() => step = 2}>02 WINDOW</button>
-    <button class:active={step === 3} on:click={() => step = 3}>03 BACKGROUND</button>
-    <button class:active={step === 4} on:click={() => step = 4}>04 EFFECTS</button>
+    <button class:active={step === 1} on:click={() => step = 1}>01 БАЗА</button>
+    <button class:active={step === 2} on:click={() => step = 2}>02 ОКНО</button>
+    <button class:active={step === 3} on:click={() => step = 3}>03 ФОН</button>
+    <button class:active={step === 4} on:click={() => step = 4}>04 ЭФФЕКТЫ</button>
   </nav>
 
-  {#if step === 1}
+  {#if step === 4}
     <div class="grid two">
-      <label class="toggle"><input type="checkbox" bind:checked={config.autostart}/><span></span><b>Автозапуск Windows</b></label>
-      <label class="select">Стартовый источник<select bind:value={config.startSource}><option value="wave">Моя волна</option><option value="last">Последний источник</option></select></label>
+      <label class="toggle">
+        <input type="checkbox" bind:checked={config.reactiveEffects}/>
+        <b>Реактивные эффекты</b>
+        <span class="tip">? Простые визуальные эффекты под музыку. Почти не нагружают ПК.</span>
+      </label>
+
+      <label class="select">
+        Режим
+        <select bind:value={config.reactiveMode}>
+          <option value="low">Low</option>
+          <option value="normal">Normal</option>
+          <option value="aggressive">Aggressive</option>
+        </select>
+      </label>
     </div>
 
-    <div class="cards">
-      <button class:active={config.widget === 'hud'} on:click={() => chooseWidget('hud')}><b>FULL HUD</b><span>Большой киберпанк плеер</span></button>
-      <button class:active={config.widget === 'slim'} on:click={() => chooseWidget('slim')}><b>SLIM BAR</b><span>Тонкая панель</span></button>
-      <button class:active={config.widget === 'orb'} on:click={() => chooseWidget('orb')}><b>FLOATING ORB</b><span>Шар с раскрытием</span></button>
-    </div>
-  {:else if step === 2}
-    <div class="grid two">
-      <label class="toggle"><input type="checkbox" bind:checked={config.alwaysOnTop}/><span></span><b>Always on top</b></label>
-      <label class="toggle"><input type="checkbox" bind:checked={config.desktopPin}/><span></span><b>Закрепить на рабочем столе</b></label>
-      <label class="toggle"><input type="checkbox" bind:checked={config.floating}/><span></span><b>Floating режим</b></label>
-      <label class="toggle"><input type="checkbox" bind:checked={config.locked}/><span></span><b>Lock позицию</b></label>
-    </div>
-    <label class="select wide">Режим окна<select bind:value={config.windowMode}><option value="floating">Floating</option><option value="desktop">Desktop pin</option><option value="topmost">Always on top</option></select></label>
-  {:else if step === 3}
-    <div class="grid two">
-      <label class="toggle"><input type="checkbox" bind:checked={config.closeToTray}/><span></span><b>Закрытие в трей</b></label>
-      <label class="toggle"><input type="checkbox" bind:checked={config.hideUi}/><span></span><b>Скрывать UI</b></label>
-      <label class="toggle"><input type="checkbox" bind:checked={config.startHidden}/><span></span><b>Запуск без окна</b></label>
-    </div>
-  {:else}
-    <div class="grid two">
-      <label class="toggle"><input type="checkbox" bind:checked={config.reactiveEffects}/><span></span><b>Audio reactive effects</b></label>
-      <label class="select">Mode<select bind:value={config.reactiveMode}><option value="low">Low</option><option value="normal">Normal</option><option value="aggressive">Aggressive</option></select></label>
+    <div class="fft-block">
+      <h3>FFT анализ (эксперимент)</h3>
+      <span class="tip">? Реальный анализ звука. Красиво, но может нагружать процессор.</span>
+
+      <label class="toggle">
+        <input type="checkbox" bind:checked={config.experimentalFftAnalyzer}/>
+        <b>Включить FFT</b>
+      </label>
+
+      <label class="select">
+        Нагрузка
+        <select bind:value={config.fftMode}>
+          <option value="low">Low (лёгкий)</option>
+          <option value="normal">Normal</option>
+          <option value="high">High (нагрузка)</option>
+        </select>
+      </label>
+
+      <label class="toggle">
+        <input type="checkbox" bind:checked={config.disableFftInBackground}/>
+        <b>Отключать в фоне</b>
+        <span class="tip">? Экономит ресурсы, когда виджет скрыт.</span>
+      </label>
     </div>
   {/if}
 
   <footer>
-    <button disabled={step === 1} on:click={() => step--}>← BACK</button>
-    {#if step < 4}<button class="primary" on:click={() => step++}>NEXT →</button>{:else}<button class="primary" on:click={save}>{saving ? 'SAVING...' : saved ? 'SAVED' : 'SAVE CONFIG'}</button>{/if}
+    <button disabled={step === 1} on:click={() => step--}>← Назад</button>
+    {#if step < 4}
+      <button class="primary" on:click={() => step++}>Далее →</button>
+    {:else}
+      <button class="primary" on:click={save}>{saving ? 'СОХРАНЕНИЕ...' : saved ? 'СОХРАНЕНО' : 'СОХРАНИТЬ'}</button>
+    {/if}
   </footer>
 </section>
 
 <style>
-/* styles unchanged */
+.tip { margin-left: 6px; font-size: 11px; color: #7eefff; cursor: help; }
+.fft-block { margin-top: 20px; padding: 10px; border: 1px solid #444; }
 </style>
