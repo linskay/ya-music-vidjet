@@ -18,7 +18,7 @@
   <img src="docs/assets/social-preview.png" alt="preview" width="100%" />
 </p>
 
-<img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/images/separator.svg" alt="separator" width="100%" />
+<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
 
 ## Что это
 
@@ -26,35 +26,18 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 
 Основная идея: музыка работает в фоне, а на рабочем столе остаётся только нужный интерфейс — HUD, Slim или Orb.
 
-<img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/images/separator.svg" alt="separator" width="100%" />
+<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
 
 ## Возможности
 
-<p>
-  <img src="https://cdn-icons-png.flaticon.com/512/727/727245.png" width="22" alt="play" /> управление воспроизведением: play / pause / next / previous
-</p>
+<p><img src="https://cdn-icons-png.flaticon.com/512/727/727245.png" width="22" alt="play" /> управление воспроизведением: play / pause / next / previous</p>
+<p><img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" width="22" alt="like" /> like / dislike для треков</p>
+<p><img src="https://cdn-icons-png.flaticon.com/512/727/727269.png" width="22" alt="wave" /> запуск «Моей волны»</p>
+<p><img src="https://cdn-icons-png.flaticon.com/512/992/992651.png" width="22" alt="settings" /> настройки на русском языке</p>
+<p><img src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" width="22" alt="tray" /> работа в фоне и закрытие в трей</p>
+<p><img src="https://cdn-icons-png.flaticon.com/512/10435/10435152.png" width="22" alt="performance" /> адаптивные анимации и безопасный режим производительности</p>
 
-<p>
-  <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" width="22" alt="like" /> like / dislike для треков
-</p>
-
-<p>
-  <img src="https://cdn-icons-png.flaticon.com/512/727/727269.png" width="22" alt="wave" /> запуск «Моей волны»
-</p>
-
-<p>
-  <img src="https://cdn-icons-png.flaticon.com/512/992/992651.png" width="22" alt="settings" /> настройки на русском языке
-</p>
-
-<p>
-  <img src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" width="22" alt="tray" /> работа в фоне и закрытие в трей
-</p>
-
-<p>
-  <img src="https://cdn-icons-png.flaticon.com/512/10435/10435152.png" width="22" alt="performance" /> адаптивные анимации и безопасный режим производительности
-</p>
-
-<img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/images/separator.svg" alt="separator" width="100%" />
+<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
 
 ## Виджеты
 
@@ -66,7 +49,7 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 
 В один момент отображается только один режим. Это снижает нагрузку и не захламляет рабочий стол.
 
-<img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/images/separator.svg" alt="separator" width="100%" />
+<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
 
 ## Авторизация
 
@@ -78,7 +61,7 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 
 После этого повторный вход обычно не требуется: приложение использует сохранённые cookies и localStorage.
 
-<img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/images/separator.svg" alt="separator" width="100%" />
+<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
 
 ## Настройки
 
@@ -100,7 +83,7 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 
 По умолчанию тяжёлые функции выключены. FFT-анализ включается только вручную.
 
-<img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/images/separator.svg" alt="separator" width="100%" />
+<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
 
 ## Установка
 
@@ -108,7 +91,7 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 
 Installer создаёт приложение для текущего пользователя. В настройках приложения можно включить или выключить автозапуск Windows.
 
-<img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/images/separator.svg" alt="separator" width="100%" />
+<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
 
 ## Сборка из исходников
 
@@ -133,7 +116,7 @@ cd src-tauri
 cargo tauri build
 ```
 
-<img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/images/separator.svg" alt="separator" width="100%" />
+<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
 
 ## Стек
 
@@ -146,7 +129,7 @@ WebSocket
 GitHub Actions
 ```
 
-<img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/images/separator.svg" alt="separator" width="100%" />
+<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
 
 ## Статус
 
