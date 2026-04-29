@@ -1,5 +1,6 @@
 package ru.linskay.ymv;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.*;
 import io.javalin.Javalin;
 import io.javalin.websocket.WsContext;
@@ -10,6 +11,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class App {
+    private static final ObjectMapper JSON = new ObjectMapper();
     private static Playwright playwright;
     private static BrowserContext browserContext;
     private static Page page;
@@ -30,7 +32,7 @@ public class App {
         app.post("/api/config", ctx -> {
             AppConfig cfg = ctx.bodyAsClass(AppConfig.class);
             configService.save(cfg);
-            AutoStartService.apply(cfg.autostart);
+            AutoStartService.apply(cfg.autostart());
             ctx.json(cfg);
         });
 
@@ -62,7 +64,7 @@ public class App {
         Thread thread = new Thread(() -> {
             while (!Thread.currentThread().isInterrupted()) {
                 try {
-                    String json = io.javalin.json.JavalinJackson.defaultMapper().toJsonString(controller.getState(), PlayerState.class);
+                    String json = JSON.writeValueAsString(controller.getState());
                     for (WsContext client : clients) {
                         try { client.send(json); } catch (Exception e) { clients.remove(client); }
                     }
