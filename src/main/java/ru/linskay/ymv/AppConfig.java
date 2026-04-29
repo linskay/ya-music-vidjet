@@ -14,9 +14,11 @@ public record AppConfig(
         boolean startHidden,
         boolean reactiveEffects,
         String reactiveMode,
-        boolean experimentalFftAnalyzer
+        boolean experimentalFftAnalyzer,
+        String fftMode,
+        boolean disableFftInBackground
 ) {
     public static AppConfig defaults() {
-        return new AppConfig(true, "hud", "wave", "floating", true, false, true, false, true, false, false, true, "normal", false);
+        return new AppConfig(true, "hud", "wave", "floating", true, false, true, false, true, false, false, true, "normal", false, "low", true);
     }
 }
