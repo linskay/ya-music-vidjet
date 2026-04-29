@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/logo.svg" alt="YA Music Widget" width="420" />
+  <img src="docs/assets/logo.png" alt="YA Music Widget" width="420" />
 </p>
 
 <h1 align="center">YA Music Widget</h1>
@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Windows-only-35f3ff?style=for-the-badge" alt="Windows" />
   <img src="https://img.shields.io/badge/Java-21-ff5d68?style=for-the-badge" alt="Java 21" />
-  <img src="https://img.shields.io/badge/Svelte-Tauri-35f3ff?style=for-the-badge" alt="Svelte + Tauri" />
+  <img src="https://img.shields.io/badge/Svelte%20%2B%20Tauri-desktop-35f3ff?style=for-the-badge" alt="Svelte + Tauri" />
 </p>
 
 <p align="center">
@@ -114,17 +114,4 @@ npm run build
 cd ..
 cd src-tauri
 cargo tauri build
-```
-
-<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Up.png?raw=true" alt="separator" width="100%" /></p>
-
-## Стек
-
-```text
-Java + Javalin
-Playwright
-Svelte + Vite
-Tauri
-WebSocket
-GitHub Actions
 ```
