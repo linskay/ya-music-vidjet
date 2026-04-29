@@ -9,11 +9,11 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["msi", "nsis"],
+    "targets": ["nsis"],
     "publisher": "Linskay",
     "category": "Music",
     "shortDescription": "Cyberpunk Yandex Music desktop widget",
-    "longDescription": "Neon desktop overlay widget for Yandex Music with Java backend, Playwright control, WebSocket sync and tray mode.",
+    "longDescription": "Cyberpunk desktop overlay widget for Yandex Music with Java backend, Playwright control, WebSocket sync and tray mode.",
     "icon": [
       "icons/icon.ico",
       "icons/icon.png",
@@ -31,10 +31,10 @@
       "nsis": {
         "displayLanguageSelector": true,
         "installerIcon": "icons/icon.ico",
-        "installMode": "perMachine"
-      },
-      "wix": {
-        "language": ["en-US", "ru-RU"]
+        "installMode": "currentUser",
+        "languages": ["Russian", "English"],
+        "createDesktopShortcut": true,
+        "installMode": "currentUser"
       }
     }
   },
