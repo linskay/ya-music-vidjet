@@ -28,6 +28,10 @@ public class App {
         app.post("/api/config", ctx -> {
             AppConfig cfg = ctx.bodyAsClass(AppConfig.class);
             configService.save(cfg);
+
+            // 🔥 apply autostart immediately
+            AutoStartService.apply(cfg.autostart);
+
             ctx.json(cfg);
         });
 
