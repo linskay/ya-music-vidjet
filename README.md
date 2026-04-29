@@ -128,9 +128,3 @@ Tauri
 WebSocket
 GitHub Actions
 ```
-
-<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Down.png?raw=true" alt="separator" width="100%" /></p>
-
-## Статус
-
-Проект находится в активной разработке. Основной фокус сейчас — стабильность авторизации, лёгкость интерфейса, корректная работа настроек и удобная Windows-сборка.
