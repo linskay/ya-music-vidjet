@@ -18,7 +18,7 @@
   <img src="docs/assets/social-preview.png" alt="preview" width="100%" />
 </p>
 
-<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
+<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Down.png?raw=true" alt="separator" width="100%" /></p>
 
 ## Что это
 
@@ -26,7 +26,7 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 
 Основная идея: музыка работает в фоне, а на рабочем столе остаётся только нужный интерфейс — HUD, Slim или Orb.
 
-<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
+<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Up.png?raw=true" alt="separator" width="100%" /></p>
 
 ## Возможности
 
@@ -37,7 +37,7 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 <p><img src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" width="22" alt="tray" /> работа в фоне и закрытие в трей</p>
 <p><img src="https://cdn-icons-png.flaticon.com/512/10435/10435152.png" width="22" alt="performance" /> адаптивные анимации и безопасный режим производительности</p>
 
-<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
+<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Down.png?raw=true" alt="separator" width="100%" /></p>
 
 ## Виджеты
 
@@ -49,7 +49,7 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 
 В один момент отображается только один режим. Это снижает нагрузку и не захламляет рабочий стол.
 
-<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
+<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Up.png?raw=true" alt="separator" width="100%" /></p>
 
 ## Авторизация
 
@@ -61,7 +61,7 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 
 После этого повторный вход обычно не требуется: приложение использует сохранённые cookies и localStorage.
 
-<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
+<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Down.png?raw=true" alt="separator" width="100%" /></p>
 
 ## Настройки
 
@@ -83,7 +83,7 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 
 По умолчанию тяжёлые функции выключены. FFT-анализ включается только вручную.
 
-<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
+<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Up.png?raw=true" alt="separator" width="100%" /></p>
 
 ## Установка
 
@@ -91,7 +91,7 @@ YA Music Widget — desktop overlay для Яндекс Музыки. Прило
 
 Installer создаёт приложение для текущего пользователя. В настройках приложения можно включить или выключить автозапуск Windows.
 
-<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
+<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Down.png?raw=true" alt="separator" width="100%" /></p>
 
 ## Сборка из исходников
 
@@ -116,7 +116,7 @@ cd src-tauri
 cargo tauri build
 ```
 
-<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
+<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Up.png?raw=true" alt="separator" width="100%" /></p>
 
 ## Стек
 
@@ -129,7 +129,7 @@ WebSocket
 GitHub Actions
 ```
 
-<p align="center"><img src="https://raw.githubusercontent.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/main/docs/assets/separator.svg" alt="separator" width="100%" /></p>
+<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Down.png?raw=true" alt="separator" width="100%" /></p>
 
 ## Статус
 
