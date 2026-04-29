@@ -4,12 +4,14 @@ import com.microsoft.playwright.*;
 import io.javalin.Javalin;
 import io.javalin.websocket.WsContext;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class App {
     private static Playwright playwright;
-    private static Browser browser;
+    private static BrowserContext browserContext;
     private static Page page;
     private static PlayerController controller;
     private static ConfigService configService;
@@ -28,10 +30,7 @@ public class App {
         app.post("/api/config", ctx -> {
             AppConfig cfg = ctx.bodyAsClass(AppConfig.class);
             configService.save(cfg);
-
-            // 🔥 apply autostart immediately
             AutoStartService.apply(cfg.autostart);
-
             ctx.json(cfg);
         });
 
@@ -49,6 +48,8 @@ public class App {
         app.get("/api/like", ctx -> runCommand(ctx, () -> clickAny("[data-test-id='like-button']", ".player-controls__btn_like", "button[aria-label*='Нравится']")));
         app.get("/api/dislike", ctx -> runCommand(ctx, () -> clickAny("[data-test-id='dislike-button']", "button[aria-label*='Не нравится']")));
         app.get("/api/wave", ctx -> runCommand(ctx, () -> { page.navigate("https://music.yandex.ru/home"); cleanupYandexUi(); }));
+        app.get("/api/login", ctx -> runCommand(ctx, () -> page.navigate("https://music.yandex.ru/home")));
+        app.get("/api/session/reset", ctx -> runCommand(ctx, App::resetSession));
         app.get("/api/volume/{value}", ctx -> runCommand(ctx, () -> {
             double value = Math.max(0, Math.min(1, Double.parseDouble(ctx.pathParam("value"))));
             page.evaluate("value => { const a = document.querySelector('audio'); if (a) a.volume = value; }", value);
@@ -75,13 +76,46 @@ public class App {
 
     private static void initBrowser() {
         playwright = Playwright.create();
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
+        Path profileDir = getProfileDir();
+        try { Files.createDirectories(profileDir); } catch (Exception ignored) {}
+
+        browserContext = playwright.chromium().launchPersistentContext(profileDir, new BrowserType.LaunchPersistentContextOptions()
                 .setHeadless(true)
-                .setArgs(java.util.List.of("--autoplay-policy=no-user-gesture-required", "--disable-gpu")));
-        BrowserContext context = browser.newContext(new Browser.NewContextOptions().setViewportSize(1280, 720));
-        page = context.newPage();
+                .setViewportSize(1280, 720)
+                .setArgs(java.util.List.of(
+                        "--autoplay-policy=no-user-gesture-required",
+                        "--disable-gpu",
+                        "--disable-background-timer-throttling",
+                        "--disable-renderer-backgrounding"
+                )));
+
+        page = browserContext.pages().isEmpty() ? browserContext.newPage() : browserContext.pages().get(0);
         page.navigate("https://music.yandex.ru/home");
         cleanupYandexUi();
+    }
+
+    private static Path getProfileDir() {
+        String base = System.getenv("APPDATA");
+        if (base == null || base.isBlank()) {
+            base = System.getProperty("user.home", ".");
+        }
+        return Path.of(base, "YA Music Widget", "browser-profile");
+    }
+
+    private static void resetSession() {
+        shutdown();
+        try { deleteRecursively(getProfileDir()); } catch (Exception ignored) {}
+        initBrowser();
+        controller = new PlayerController(page);
+    }
+
+    private static void deleteRecursively(Path path) throws java.io.IOException {
+        if (!Files.exists(path)) return;
+        try (var stream = Files.walk(path)) {
+            stream.sorted(java.util.Comparator.reverseOrder()).forEach(p -> {
+                try { Files.deleteIfExists(p); } catch (Exception ignored) {}
+            });
+        }
     }
 
     private static void runCommand(io.javalin.http.Context ctx, Runnable command) {
@@ -112,7 +146,7 @@ public class App {
     }
 
     private static void shutdown() {
-        try { if (browser != null) browser.close(); } catch (Exception ignored) {}
+        try { if (browserContext != null) browserContext.close(); } catch (Exception ignored) {}
         try { if (playwright != null) playwright.close(); } catch (Exception ignored) {}
     }
 }
