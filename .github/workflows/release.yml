@@ -61,17 +61,35 @@ jobs:
           tagName: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '' }}
           releaseName: YA Music Widget ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'dev-build' }}
           releaseBody: |
+            <p align="center">
+              <img src="https://raw.githubusercontent.com/linskay/ya-music-vidjet/main/docs/assets/logo.png" width="320" alt="YA Music Widget" />
+            </p>
+
             ## YA Music Widget
 
-            Автоматическая сборка.
+            Cyberpunk desktop overlay для Яндекс Музыки на Windows.
 
-            ### Внутри
-            - HUD / Slim / Orb виджеты
-            - Tray/background режим
-            - Settings wizard
-            - Adaptive performance
-            - Windows installer
-            - Signed updater metadata
+            ### Главное
+            - HUD / Slim / Orb режимы
+            - управление Яндекс Музыкой: play / pause / next / previous / like
+            - сохранение авторизации Яндекс Музыки между запусками
+            - работа в фоне и закрытие в трей
+            - автозапуск Windows через настройки
+            - киберпанк Settings UI на русском языке
+            - адаптивные анимации и безопасный режим производительности
+            - экспериментальный FFT-анализ выключен по умолчанию
+            - подписанный updater metadata для автообновлений
+
+            ### Установка
+            1. Скачайте `.exe` installer из Assets.
+            2. Установите приложение.
+            3. При первом запуске авторизуйтесь в Яндекс Музыке.
+            4. После авторизации сессия сохранится автоматически.
+
+            ### Что скачивать
+            Для обычной установки выбирайте `.exe` installer.
+
+            `latest.json` и `.sig` нужны приложению для автообновлений.
           releaseDraft: false
           prerelease: false
           includeUpdaterJson: true
