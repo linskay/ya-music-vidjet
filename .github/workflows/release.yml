@@ -10,14 +10,32 @@ on:
 
 permissions:
   contents: write
+  actions: write
+
+concurrency:
+  group: build-and-release-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  cleanup-runs:
+    name: Keep latest workflow runs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 5
+
   build-windows:
     name: Build Windows app
     runs-on: windows-latest
+    needs: cleanup-runs
 
     steps:
       - name: Checkout
