@@ -1,0 +1,32 @@
+name: Generate Tauri Key
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --locked
+
+      - name: Generate key
+        id: keygen
+        run: |
+          mkdir -p .keys
+          cargo tauri signer generate -w .keys/tauri.key > key_output.txt
+          echo "--- PUBLIC KEY ---"
+          cat key_output.txt
+
+      - name: Upload private key
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-private-key
+          path: .keys/tauri.key
