@@ -33,8 +33,7 @@
         "installerIcon": "icons/icon.ico",
         "installMode": "currentUser",
         "languages": ["Russian", "English"],
-        "createDesktopShortcut": true,
-        "installMode": "currentUser"
+        "createDesktopShortcut": true
       }
     }
   },
@@ -45,7 +44,7 @@
         "https://github.com/linskay/ya-music-vidjet/releases/latest/download/latest.json"
       ],
       "dialog": true,
-      "pubkey": "PASTE_TAURI_UPDATER_PUBLIC_KEY_HERE"
+      "pubkey": "sha256:941414544d9d2865de37c5e2cca578e4ce23e69d6e9549c1865f0fa79a46ee84"
     }
   },
   "app": {
