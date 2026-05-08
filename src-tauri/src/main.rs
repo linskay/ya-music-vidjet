@@ -1,16 +1,18 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod tray;
+mod window;
+
 use std::process::{Child, Command, Stdio};
 use std::sync::Mutex;
 use tauri::{Manager, State};
-use tauri::menu::{Menu, MenuItem};
-use tauri::tray::TrayIconBuilder;
 
 struct BackendProcess(Mutex<Option<Child>>);
 
 fn spawn_backend(app: &tauri::AppHandle) -> Option<Child> {
-    let path = app.path_resolver().resolve_resource("ya-music-vidjet-0.1.0-SNAPSHOT.jar")?;
+    let path = app.path_resolver().resolve_resource("ya-music-vidjet.jar")?;
 
+    // В будущем здесь можно добавить поиск bundled JRE
     Command::new("java")
         .arg("-jar")
         .arg(path)
@@ -20,16 +22,24 @@ fn spawn_backend(app: &tauri::AppHandle) -> Option<Child> {
         .ok()
 }
 
-fn call_api(path: &str) {
-    let _ = reqwest::blocking::get(format!("http://127.0.0.1:7070{}", path));
+#[tauri::command]
+fn exit_app(state: State<BackendProcess>) {
+    stop_backend(&state);
+    std::process::exit(0);
 }
 
-#[tauri::command]
-fn exit_app(app: tauri::AppHandle, state: State<BackendProcess>) {
+fn stop_backend(state: &BackendProcess) {
+    // Graceful shutdown attempt
+    let _ = reqwest::blocking::Client::new()
+        .post("http://127.0.0.1:7070/api/system/shutdown")
+        .timeout(std::time::Duration::from_secs(1))
+        .send();
+
+    std::thread::sleep(std::time::Duration::from_millis(500));
+
     if let Some(mut child) = state.0.lock().unwrap().take() {
         let _ = child.kill();
     }
-    std::process::exit(0);
 }
 
 fn main() {
@@ -38,40 +48,13 @@ fn main() {
         .manage(BackendProcess(Mutex::new(None)))
         .invoke_handler(tauri::generate_handler![exit_app])
         .setup(|app| {
-            let window = app.get_window("main").unwrap();
-            window.set_always_on_top(true).unwrap();
+            let main_window = app.get_window("main").unwrap();
+            window::setup_window(&main_window);
 
             let state: State<BackendProcess> = app.state();
             *state.0.lock().unwrap() = spawn_backend(&app.handle());
 
-            let play = MenuItem::with_id(app, "play", "Play / Pause", true, None::<&str>)?;
-            let next = MenuItem::with_id(app, "next", "Next", true, None::<&str>)?;
-            let prev = MenuItem::with_id(app, "prev", "Prev", true, None::<&str>)?;
-            let quit = MenuItem::with_id(app, "quit", "Exit", true, None::<&str>)?;
-
-            let menu = Menu::with_items(app, &[&play, &next, &prev, &quit])?;
-
-            let app_handle = app.handle().clone();
-
-            TrayIconBuilder::new()
-                .icon(app.default_window_icon().unwrap().clone())
-                .menu(&menu)
-                .tooltip("YA Music Widget")
-                .on_menu_event(move |app, event| {
-                    match event.id.as_ref() {
-                        "play" => call_api("/api/play"),
-                        "next" => call_api("/api/next"),
-                        "prev" => call_api("/api/prev"),
-                        "quit" => app.exit(0),
-                        _ => {}
-                    }
-                })
-                .on_tray_icon_event(move |_tray, _| {
-                    if let Some(window) = app_handle.get_window("main") {
-                        let _ = window.show();
-                    }
-                })
-                .build(app)?;
+            tray::setup_tray(app.handle())?;
 
             Ok(())
         })

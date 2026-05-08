@@ -1,117 +1,69 @@
-<p align="center">
-  <img src="docs/assets/logo.png" alt="YA Music Widget" width="420" />
-</p>
+# YA Music Widget
 
-<h1 align="center">YA Music Widget</h1>
+![Windows Only](https://img.shields.io/badge/Platform-Windows-0078d7?style=for-the-badge&logo=windows)
+![Java 21](https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk)
+![Svelte Tauri](https://img.shields.io/badge/Svelte-Tauri-ff3e00?style=for-the-badge&logo=svelte)
 
-<p align="center">
-  Лёгкий киберпанк-виджет для управления Яндекс Музыкой на Windows.
-</p>
+YA Music Widget — десктопное приложение для Windows, которое позволяет управлять Яндекс Музыкой через компактный киберпанк-виджет поверх рабочего стола.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Windows-only-35f3ff?style=for-the-badge" alt="Windows" />
-  <img src="https://img.shields.io/badge/Java-21-ff5d68?style=for-the-badge" alt="Java 21" />
-  <img src="https://img.shields.io/badge/Svelte%20%2B%20Tauri-desktop-35f3ff?style=for-the-badge" alt="Svelte + Tauri" />
-</p>
+> **Главная идея:** вам больше не нужно держать открытую вкладку браузера. Получите отдельный десктопный оверлей в стиле Cyberpunk HUD.
 
-<p align="center">
-  <img src="docs/assets/social-preview.png" alt="preview" width="100%" />
-</p>
+---
 
-<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Down.png?raw=true" alt="separator" width="100%" /></p>
+## 🎨 Режимы интерфейса
 
-## Что это
+Приложение поддерживает три основных визуальных режима:
 
-YA Music Widget — desktop overlay для Яндекс Музыки. Приложение открывает Яндекс Музыку в скрытом Playwright-браузере, сохраняет авторизацию и даёт управление через отдельный лёгкий виджет.
+| HUD (Основной) | Slim (Компактный) | Orb (Минимальный) |
+| :--- | :--- | :--- |
+| ![HUD](docs/assets/hud_v7.png) | ![Slim](docs/assets/slim_v7.png) | ![Orb](docs/assets/orb_v7.png) |
+| Полноразмерный интерфейс со всеми деталями. | Горизонтальная панель для постоянного использования. | Маленький неоновый индикатор. |
 
-Основная идея: музыка работает в фоне, а на рабочем столе остаётся только нужный интерфейс — HUD, Slim или Orb.
+---
 
-<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Up.png?raw=true" alt="separator" width="100%" /></p>
+## ✨ Основные возможности
 
-## Возможности
+- **Скрытый браузер:** Использует Playwright для работы с Яндекс Музыкой в фоне.
+- **Сохранение сессии:** Ваша авторизация хранится локально в безопасном профиле браузера.
+- **Киберпанк эстетика:** Анимированные неоновые эффекты, реактивность на музыку.
+- **Управление из трея:** Быстрый доступ к Play/Pause, Next/Prev без открытия окна.
+- **Always-on-Top:** Виджет всегда под рукой или закреплен на рабочем столе.
 
-<p><img src="https://cdn-icons-png.flaticon.com/512/727/727245.png" width="22" alt="play" /> управление воспроизведением: play / pause / next / previous</p>
-<p><img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" width="22" alt="like" /> like / dislike для треков</p>
-<p><img src="https://cdn-icons-png.flaticon.com/512/727/727269.png" width="22" alt="wave" /> запуск «Моей волны»</p>
-<p><img src="https://cdn-icons-png.flaticon.com/512/992/992651.png" width="22" alt="settings" /> настройки на русском языке</p>
-<p><img src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" width="22" alt="tray" /> работа в фоне и закрытие в трей</p>
-<p><img src="https://cdn-icons-png.flaticon.com/512/10435/10435152.png" width="22" alt="performance" /> адаптивные анимации и безопасный режим производительности</p>
+---
 
-<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Down.png?raw=true" alt="separator" width="100%" /></p>
+## 🚀 Быстрый старт
 
-## Виджеты
+1. Скачайте последний `.exe` из раздела [Releases](https://github.com/Linskay/ya-music-widget/releases).
+2. Установите приложение.
+3. При первом запуске пройдите Onboarding и авторизуйтесь в Яндекс Музыке.
+4. Настройте внешний вид под себя в панели **Settings**.
 
-| Режим | Описание |
-|---|---|
-| HUD | основной киберпанк-интерфейс с обложкой, прогрессом, кнопками и реактивными эффектами |
-| Slim | компактная панель для постоянного использования |
-| Orb | минимальный режим, когда нужен только индикатор и быстрый возврат к HUD |
+---
 
-В один момент отображается только один режим. Это снижает нагрузку и не захламляет рабочий стол.
+## 🛠 Технический стек
 
-<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Up.png?raw=true" alt="separator" width="100%" /></p>
+- **Core:** Java 21 + Playwright Java + Javalin
+- **Desktop Shell:** Tauri 2.0 (Rust)
+- **Frontend:** Svelte 5 + TypeScript + Vite
+- **CI/CD:** GitHub Actions
 
-## Авторизация
+---
 
-При первом запуске пользователь авторизуется в Яндекс Музыке. Сессия сохраняется в профиле приложения:
+## 🔒 Приватность и Безопасность
 
-```text
-%APPDATA%/YA Music Widget/browser-profile
-```
+Приложение работает **локально**. Ваши данные авторизации (cookies/сессия) сохраняются только на вашем компьютере в директории `%APPDATA%/YA Music Widget/browser-profile`. Приложение не имеет доступа к вашему паролю.
 
-После этого повторный вход обычно не требуется: приложение использует сохранённые cookies и localStorage.
+---
 
-<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Down.png?raw=true" alt="separator" width="100%" /></p>
+## 🧩 Диагностика и Решение проблем
 
-## Настройки
+Если виджет перестал получать данные (статус `SYNC LOST`):
+1. Откройте **Settings** -> **Диагностика**.
+2. Попробуйте нажать **Restart Core**.
+3. Если проблема сохраняется, проверьте авторизацию в разделе **Auth**.
 
-В приложении есть киберпанк-меню настроек с русским интерфейсом и подсказками.
+---
 
-Доступные параметры:
+## 📄 Лицензия
 
-```text
-автозапуск Windows
-выбор виджета: HUD / Slim / Orb
-стартовый источник: Моя волна
-поверх всех окон
-закрепление позиции
-закрытие в трей
-запуск без окна
-реактивные эффекты: Low / Normal / Aggressive
-экспериментальный FFT-анализ: Off / Low / Normal / High
-```
-
-По умолчанию тяжёлые функции выключены. FFT-анализ включается только вручную.
-
-<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Up.png?raw=true" alt="separator" width="100%" /></p>
-
-## Установка
-
-Готовые сборки публикуются в GitHub Releases.
-
-Installer создаёт приложение для текущего пользователя. В настройках приложения можно включить или выключить автозапуск Windows.
-
-<p align="center"><img src="https://github.com/CDPR-Modding-Documentation/Cyberpunk-Modding-Docs/blob/main/.gitbook/assets/Type=Down.png?raw=true" alt="separator" width="100%" /></p>
-
-## Сборка из исходников
-
-Требования:
-
-```text
-Java 21
-Node.js 20+
-Rust stable
-Maven
-```
-
-Команды:
-
-```bash
-mvn -B clean package
-cd frontend
-npm install
-npm run build
-cd ..
-cd src-tauri
-cargo tauri build
-```
+Project is licensed under the MIT License.

@@ -1,125 +1,66 @@
-name: Build and Release
+name: Release
 
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*'
   workflow_dispatch:
 
-permissions:
-  contents: write
-  actions: write
-
-concurrency:
-  group: build-and-release-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
-  cleanup-runs:
-    name: Keep latest workflow runs
-    runs-on: ubuntu-latest
+  release:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [windows-latest]
+
+    runs-on: ${{ matrix.platform }}
     steps:
-      - name: Delete old workflow runs
-        uses: Mattraks/delete-workflow-runs@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          retain_days: 0
-          keep_minimum_runs: 5
+      - uses: actions/checkout@v4
 
-  build-windows:
-    name: Build Windows app
-    runs-on: windows-latest
-    needs: cleanup-runs
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '21'
-          cache: maven
-
-      - name: Setup Node
+      - name: setup node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: 22
 
-      - name: Setup Rust
+      - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Build backend jar
-        run: mvn -B clean package
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
 
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm install
+        run: npm ci
 
       - name: Build frontend
         working-directory: frontend
         run: npm run build
 
-      - name: Build signed Tauri app
-        uses: tauri-apps/tauri-action@v0
+      - name: Build Java Backend
+        run: mvn -B clean package -DskipTests
+
+      - name: Copy Backend to Tauri Resources
+        shell: bash
+        run: |
+          mkdir -p src-tauri/resources
+          cp target/ya-music-vidjet-*.jar src-tauri/resources/ya-music-vidjet.jar
+
+      - name: install tauri-cli
+        run: cargo install tauri-cli
+
+      - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
-          projectPath: .
-          tauriScript: cargo tauri
-          tagName: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '' }}
-          releaseName: YA Music Widget ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'dev-build' }}
-          releaseBody: |
-            <p align="center">
-              <img src="https://raw.githubusercontent.com/linskay/ya-music-vidjet/main/docs/assets/logo.png" width="320" alt="YA Music Widget" />
-            </p>
-
-            ## YA Music Widget
-
-            Cyberpunk desktop overlay для Яндекс Музыки на Windows.
-
-            ### Главное
-            - HUD / Slim / Orb режимы
-            - управление Яндекс Музыкой: play / pause / next / previous / like
-            - сохранение авторизации Яндекс Музыки между запусками
-            - работа в фоне и закрытие в трей
-            - автозапуск Windows через настройки
-            - киберпанк Settings UI на русском языке
-            - адаптивные анимации и безопасный режим производительности
-            - экспериментальный FFT-анализ выключен по умолчанию
-            - подписанный updater metadata для автообновлений
-
-            ### Установка
-            1. Скачайте `.exe` installer из Assets.
-            2. Установите приложение.
-            3. При первом запуске авторизуйтесь в Яндекс Музыке.
-            4. После авторизации сессия сохранится автоматически.
-
-            ### Что скачивать
-            Для обычной установки выбирайте `.exe` installer.
-
-            `latest.json` и `.sig` нужны приложению для автообновлений.
-          releaseDraft: false
+          tagName: v__VERSION__ # tauri-action replaces this with the app version
+          releaseName: "YA Music Widget v__VERSION__"
+          releaseBody: "See the assets below to download the latest version."
+          releaseDraft: true
           prerelease: false
-          includeUpdaterJson: true
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ya-music-widget-windows
-          path: |
-            src-tauri/target/release/bundle/**/*.msi
-            src-tauri/target/release/bundle/**/*.exe
-            src-tauri/target/release/bundle/**/*.zip
-            src-tauri/target/release/bundle/**/latest.json
-            src-tauri/target/release/bundle/**/*.sig
-          if-no-files-found: warn
+          args: ""

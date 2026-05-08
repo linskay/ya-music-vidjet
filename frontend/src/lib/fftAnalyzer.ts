@@ -37,7 +37,7 @@ export class FftAnalyzer {
 
   sample(): FftBands {
     if (!this.active || !this.analyser || !this.data) return ZERO;
-    this.analyser.getByteFrequencyData(this.data);
+    this.analyser.getByteFrequencyData(this.data as any);
     const avg = (from: number, to: number) => {
       let sum = 0;
       const end = Math.min(this.data!.length, to);
